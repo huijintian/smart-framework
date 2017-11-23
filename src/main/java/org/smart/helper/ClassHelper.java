@@ -5,6 +5,7 @@ import org.smart.annotation.Service;
 import org.smart.util.ClassUtil;
 import org.smart.util.PropsUtil;
 
+import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
@@ -23,6 +24,38 @@ public final class ClassHelper {
 
     public static Set<Class<?>> getClazzSet() {
         return CLASS_SET;
+    }
+
+    /**
+     * 获取某个父类/接口下的所有实现类
+     *
+     * @param superClass
+     * @return
+     */
+    public static Set<Class<?>> getClassSetBySuper(Class<?> superClass) {
+        Set<Class<?>> classSet = new HashSet<>();
+        for (Class<?> cls : CLASS_SET) {
+            if (superClass.isAssignableFrom(cls) && !superClass.equals(cls)) {
+                classSet.add(cls);
+            }
+        }
+        return classSet;
+    }
+
+    /**
+     * 获取带指定注解的所有类
+     *
+     * @param annotationClass
+     * @return
+     */
+    public static Set<Class<?>> getClassSetByAnnotation(Class<? extends Annotation> annotationClass) {
+        Set<Class<?>> classSet = new HashSet<>();
+        for (Class<?> cls : CLASS_SET) {
+            if (cls.isAnnotationPresent(annotationClass)) {
+                classSet.add(cls);
+            }
+        }
+        return classSet;
     }
 
     public static Set<Class<?>> getServiceClass() {
